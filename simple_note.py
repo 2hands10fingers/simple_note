@@ -40,7 +40,7 @@ if args.n:
 			print('Note added:', args.n)
 			print('\n', '-'*20, '\n')
 
-if args.s:
+elif args.s:
 	with open(db_file, 'r') as f:
 		data = json.load(f)
 		
@@ -48,7 +48,7 @@ if args.s:
 			print(f"{'-'*20}'\n'{note_data['note']}'\n\n'{note_data['date']}")
 			print(f'ID: {idx}\n')
 
-if args.d:
+elif args.d:
 	with open(db_file, 'r') as f:
 		
 
@@ -65,13 +65,20 @@ if args.d:
 		except Exception as e:
 			print(e)
 
-if args.f:
+elif args.f:
 	with open(db_file, 'r') as f:
-		data = json.load(f)
-		filtered = filter(lambda x: args.f in x["note"], data["notes"])
+		notes = json.load(f)["notes"]
+		new_notes = []
+
+
+		for idx, note in enumerate(notes):
+			new_notes.append({**note, "id": str(idx)})
+			
+
+		filtered = filter(lambda x: args.f in x["note"], new_notes)
 		filtered = list(filtered)
 		print(f"{len(filtered)} results found: \n\n")
 		
 		for idx, note_data in enumerate(filtered):
 			print(f"{'-'*20}\n{note_data['note']}\n\n{note_data['date']}")
-			print(f'ID: {idx}\n')
+			print(f'ID: {note_data["id"]}\n')
